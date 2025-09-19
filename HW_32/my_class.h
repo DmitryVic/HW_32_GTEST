@@ -29,7 +29,7 @@ public:
     }
 
     void close() override{
-        std::cout << "close";
+        std::cout << "close\n";
     }
 };
 
@@ -42,7 +42,7 @@ protected:
     DBConnection* _con;
 public:
     ClassThatUseDb(DBConnection* con): _con(con){}
-    // Определяем реализацию деструктора
+
     virtual ~ClassThatUseDb() {
     }
 

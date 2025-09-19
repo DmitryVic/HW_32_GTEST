@@ -55,6 +55,7 @@ TEST(ChatBotStat, UsesRea3) {
 
 
 int main(int argc, char** argv) {
+    setlocale(LC_ALL, "ru_RU.UTF-8");
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

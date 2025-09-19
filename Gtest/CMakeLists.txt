@@ -1,6 +1,6 @@
 
 
-# Включаем GoogleTest (или другую библиотеку тестирования)
+# Включаем GoogleTest
 include(FetchContent)
 FetchContent_Declare(
     googletest
