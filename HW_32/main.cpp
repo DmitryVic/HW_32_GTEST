@@ -5,11 +5,12 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    cout << "main Hello World!" << endl;
+    cout << "Имитация работы!" << endl;
     int x = 5;
-    zavisim* zav = new zavisim2();
-    test_my_class t(zav);
-    cout << "main Result: " << t.test(x) << endl;
-
+    DBConnection* DB = new DBConnectionMySQL();
+    ChatBotStat t(DB);
+    cout << "main Result: " << t.useConnection(x) << endl;
+    delete DB;
+    
     return 0;
 }

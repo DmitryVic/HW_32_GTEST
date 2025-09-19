@@ -1,55 +1,82 @@
 #pragma once
+#include <iostream>
 
 
-
-class zavisim
-{
-private:
-    int data = 0;
-public:
-    zavisim() = default;;
-    virtual ~zavisim() {}
-    virtual int kv(int x) = 0;
-};
-
-class zavisim2 : public zavisim
-{
-public:
-    int kv(int x) override{
-        return x * x;
-    }
-};
-
-
-
-
-class my_class
+class DBConnection
 {
 protected:
-    zavisim* _zav;
+    int data = 0;
+   
 public:
-    my_class(zavisim* zav): _zav(zav){}
-    // Определяем реализацию деструктора
-    virtual ~my_class() {
-        // if (_zav != nullptr) {
-        //     delete _zav;
-        // }
-    }
-
-    virtual int test(int x) = 0;
+    DBConnection() = default;
+    virtual ~DBConnection() {}
+    virtual int execQuery(int x) = 0;
+    virtual bool open() = 0;
+    virtual void close() = 0;
 };
 
-class test_my_class : my_class
+class DBConnectionMySQL : public DBConnection
 {
 public:
-    test_my_class(zavisim* zav) : my_class(zav){}
-    
-      // Реализация метода test
-    int test(int x) override {
-        // Проверка на nullptr перед вызовом метода
-        if (_zav != nullptr) {
-            return _zav->kv(x);
-        }
-        return 0; // или другое значение по умолчанию
+    ~DBConnectionMySQL() override {
+        close();
     }
+    int execQuery(int x) override{
+        return x * x;
+    }
+    bool open() override{
+        return true;
+    }
+
+    void close() override{
+        std::cout << "close";
+    }
+};
+
+
+
+
+class ClassThatUseDb
+{
+protected:
+    DBConnection* _con;
+public:
+    ClassThatUseDb(DBConnection* con): _con(con){}
+    // Определяем реализацию деструктора
+    virtual ~ClassThatUseDb() {
+    }
+
+    virtual int useConnection(int x) = 0;
+    virtual bool openConnection() = 0;
+    virtual bool closeConnection() = 0;
+};
+
+class ChatBotStat : ClassThatUseDb
+{
+public:
+    ChatBotStat(DBConnection* con) : ClassThatUseDb(con){}
+    
+    int useConnection(int x) override {
+        if (_con != nullptr) {
+            return _con->execQuery(x);
+        }
+        return 0;
+    }
+
+    
+    bool openConnection() override{
+        if (_con != nullptr) {
+            return _con->open();
+        }
+        else
+        {
+            /* подключение */
+            return true;
+        }
+    }
+
+    bool closeConnection() override{
+        return true;
+    }
+
 };
